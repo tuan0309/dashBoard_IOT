@@ -123,14 +123,14 @@ const Sidebar = () => {
               Data
             </Typography>
             <Item
-              title="DataSensor"
+              title="Data Sensor"
               to="/datasensor"
               icon={<QueryStatsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="ActionHistory"
+              title="Action History"
               to="/actionhistory"
               icon={<WorkHistoryIcon />}
               selected={selected}
