@@ -30,26 +30,6 @@ const DataSensor = () => {
             headerName: "Light",
             flex: 1,
         },
-        // {
-        //     field: "email",
-        //     headerName: "Email",
-        //     flex: 1,
-        // },
-        // {
-        //     field: "address",
-        //     headerName: "Address",
-        //     flex: 1,
-        // },
-        // {
-        //     field: "city",
-        //     headerName: "City",
-        //     flex: 1,
-        // },
-        // {
-        //     field: "zipCode",
-        //     headerName: "Zip Code",
-        //     flex: 1,
-        // },
     ];
 
     return (

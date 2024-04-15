@@ -130,7 +130,6 @@ export const mockDataSensor = [
     light: 150,
   },
 ];
-
 export const mockLineData = [
   {
     id: "Temp",
