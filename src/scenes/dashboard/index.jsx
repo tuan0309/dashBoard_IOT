@@ -1,66 +1,102 @@
-import React from 'react';
+import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
 import StatBox from "../../components/StatBox";
 import Fan from "../../components/FanController";
 import Light from "../../components/LightController";
-import AirIcon from '@mui/icons-material/Air';
-import Brightness6Icon from '@mui/icons-material/Brightness6';
-import { scaleLinear } from 'd3-scale'; // You'll need to install d3-scale
-import { useState, useEffect } from 'react';
+import AirIcon from "@mui/icons-material/Air";
+import Brightness6Icon from "@mui/icons-material/Brightness6";
+import { scaleLinear } from "d3-scale"; // You'll need to install d3-scale
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { initChartData } from "../../data/mockData";
 
 // This function will return a color scale which will give us a color between blue and red based on the input value
 
-  const Dashboard = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-  
-    const [temperature, setTemperature] = useState(20);
-    const [humidity, setHumidity] = useState(50);
-    const [light, setLight] = useState(300);
-  
-    //Màu
-    const temperatureColorScale = scaleLinear()
-      .domain([0, 50])
-      .range(['#12c2e9', '#f64f59']);
-  
-    const humidityColorScale = scaleLinear()
-      .domain([10, 100])
-      .range(['#12c2e9', 'blue']);
-  
-    const lightColorScale = scaleLinear()
-      .domain([100, 500])
-      .range(['#FEC84A', '#E12A26']);
-  
-    const temperatureBackgroundColor = temperatureColorScale(temperature);
-    const humidityBackgroundColor = humidityColorScale(humidity);
-    const lightBackgroundColor = lightColorScale(light);
+const Dashboard = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
+  const [temperature, setTemperature] = useState(20);
+  const [humidity, setHumidity] = useState(50);
+  const [light, setLight] = useState(300);
+  const [chartData, setChartData] = useState(initChartData);
 
-    //random
+  //Màu
+  const temperatureColorScale = scaleLinear()
+    .domain([0, 50])
+    .range(["#12c2e9", "#f64f59"]);
+
+  const humidityColorScale = scaleLinear()
+    .domain([10, 100])
+    .range(["#12c2e9", "blue"]);
+
+  const lightColorScale = scaleLinear()
+    .domain([100, 500])
+    .range(["#FEC84A", "#E12A26"]);
+
+  const temperatureBackgroundColor = temperatureColorScale(temperature);
+  const humidityBackgroundColor = humidityColorScale(humidity);
+  const lightBackgroundColor = lightColorScale(light);
+
   useEffect(() => {
-    const temperatureInterval = setInterval(() => {
-      setTemperature(Math.floor(Math.random() * 51));
-    }, 10000);
-
-    const humidityInterval = setInterval(() => {
-      setHumidity(Math.floor(Math.random() * 91) + 10);
-    }, 10000);
-
-    const lightInterval = setInterval(() => {
-      setLight(Math.floor(Math.random() * 401) + 100);
-    }, 10000);
-
+    const interval = setInterval(() => {
+      getDataSensor();
+    }, 1500);
     return () => {
-      clearInterval(temperatureInterval);
-      clearInterval(humidityInterval);
-      clearInterval(lightInterval);
+      clearInterval(interval);
     };
   }, []);
-  
+
+  const getDataSensor = async () => {
+    const res = await axios.post("http://localhost:3000/api/dataSensor", {
+      page: 1,
+      pageSize: 99999,
+    });
+    const newestData = res?.data?.data[0];
+    setTemperature(newestData.temperature);
+    setHumidity(newestData.humidity);
+    setLight(newestData.light);
+    let tempArr = [];
+    let humpArr = [];
+    let lightArr = [];
+    res?.data?.data.slice(0, 5).forEach((item) => {
+      tempArr.push({
+        x: item.createdDate,
+        y: item.temperature,
+      });
+      humpArr.push({
+        x: item.createdDate,
+        y: item.humidity,
+      });
+      lightArr.push({
+        x: item.createdDate,
+        y: item.light,
+      });
+    });
+    const newChartData = [
+      {
+        id: "Temp",
+        color: tokens("dark").redAccent[500],
+        data: tempArr,
+      },
+      {
+        id: "Humidity",
+        color: tokens("dark").blueAccent[500],
+        data: humpArr,
+      },
+      {
+        id: "Light",
+        color: tokens("dark").greenAccent[500],
+        data: lightArr,
+      },
+    ];
+    setChartData(newChartData);
+  };
+
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -150,7 +186,7 @@ import { useState, useEffect } from 'react';
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            <LineChart isDashboard={true} chartData={chartData} />
           </Box>
         </Box>
         <Box

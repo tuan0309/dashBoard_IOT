@@ -295,3 +295,20 @@ export const mockLineData = [
   },
 ];
 
+export const initChartData = [
+  {
+    id: "Temp",
+    color: tokens("dark").redAccent[500],
+    data: [],
+  },
+  {
+    id: "Humidity",
+    color: tokens("dark").blueAccent[500],
+    data: [],
+  },
+  {
+    id: "Light",
+    color: tokens("dark").greenAccent[500],
+    data: [],
+  },
+];
