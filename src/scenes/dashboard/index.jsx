@@ -22,6 +22,7 @@ import { useState, useEffect } from 'react';
     const [humidity, setHumidity] = useState(50);
     const [light, setLight] = useState(300);
   
+    //Màu
     const temperatureColorScale = scaleLinear()
       .domain([0, 50])
       .range(['#12c2e9', '#f64f59']);
@@ -38,6 +39,8 @@ import { useState, useEffect } from 'react';
     const humidityBackgroundColor = humidityColorScale(humidity);
     const lightBackgroundColor = lightColorScale(light);
 
+
+    //random
   useEffect(() => {
     const temperatureInterval = setInterval(() => {
       setTemperature(Math.floor(Math.random() * 51));
@@ -57,6 +60,7 @@ import { useState, useEffect } from 'react';
       clearInterval(lightInterval);
     };
   }, []);
+  
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
