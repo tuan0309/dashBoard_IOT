@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
@@ -8,10 +8,30 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import ActionHistory from "./scenes/ActionHistory";
 import DataSensor from "./scenes/DataSensor";
+import axios from "axios";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+
+  useEffect(() => {
+    subscribeTopic1();
+    subscribeTopic2();
+  }, []);
+
+  const subscribeTopic1 = async () => {
+    const body = {
+      topic: "device/control",
+    };
+    await axios.post("http://localhost:3000/publisher", body);
+  };
+
+  const subscribeTopic2 = async () => {
+    const body = {
+      topic: "led/history",
+    };
+    await axios.post("http://localhost:3000/subscriber", body);
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
