@@ -23,7 +23,7 @@ function App() {
     const body = {
       topic: "device/control",
     };
-    await axios.post("http://localhost:3000/publisher", body);
+    await axios.post("http://localhost:3000/subscriber", body);
   };
 
   const subscribeTopic2 = async () => {
