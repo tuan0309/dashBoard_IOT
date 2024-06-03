@@ -9,7 +9,7 @@ import Fan from "../../components/FanController";
 import Light from "../../components/LightController";
 import AirIcon from "@mui/icons-material/Air";
 import Brightness6Icon from "@mui/icons-material/Brightness6";
-import { scaleLinear } from "d3-scale"; // You'll need to install d3-scale
+import { scaleLinear } from "d3-scale"; 
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { initChartData } from "../../data/mockData";
@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [temperature, setTemperature] = useState(20);
   const [humidity, setHumidity] = useState(50);
   const [light, setLight] = useState(300);
+  const [wind, setWind] = useState(300);
   const [chartData, setChartData] = useState(initChartData);
 
   //Màu
@@ -35,7 +36,7 @@ const Dashboard = () => {
     .range(["#12c2e9", "blue"]);
 
   const lightColorScale = scaleLinear()
-    .domain([100, 500])
+    .domain([10, 1000])
     .range(["#FEC84A", "#E12A26"]);
 
   const temperatureBackgroundColor = temperatureColorScale(temperature);
@@ -60,9 +61,11 @@ const Dashboard = () => {
     setTemperature(newestData.temperature);
     setHumidity(newestData.humidity);
     setLight(newestData.light);
+    setWind(newestData.wind);
     let tempArr = [];
     let humpArr = [];
     let lightArr = [];
+    let windArr = [];
     res?.data?.data.slice(0, 5).forEach((item) => {
       tempArr.push({
         x: item.createdDate,
@@ -161,6 +164,23 @@ const Dashboard = () => {
             }
           />
         </Box>
+        {/* <Box
+          gridColumn="span 4"
+          backgroundColor={lightBackgroundColor}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            title="WIND"
+            subtitle={`${wind}Lux`}
+            icon={
+              <Brightness6Icon
+                sx={{ color: colors.greenAccent[100], fontSize: "40px" }}
+              />
+            }
+          />
+        </Box> */}
 
         {/* ROW 2 */}
         <Box

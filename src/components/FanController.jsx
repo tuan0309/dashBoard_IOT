@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
+import axios from "axios";
 import './app.css';
 
 function Fan() {
     const [rotate, setRotate] = useState(false);
+    const [isOn, setIsOn] = useState(false);
 
-    const startRotate = () => {
+    const turnOn = () => {
+        setIsOn(true);
+        toggleLed("on2");
         setRotate(true);
     };
 
-    const stopRotate = () => {
+    const turnOff = () => {
+        setIsOn(false);
+        toggleLed("off2");
         setRotate(false);
+    };
+
+    const toggleLed = async (action) => {
+        await axios.post("http://localhost:3000/publisher", {
+            topic: "led/control",
+            message: action,
+        });
     };
 
     return (
@@ -21,8 +34,8 @@ function Fan() {
                 className={`fan ${rotate ? 'rotate' : ''}`}
             />
             <div>
-                <button onClick={startRotate}>On</button>
-                <button onClick={stopRotate}>Off</button>
+                <button onClick={turnOn}>On</button>
+                <button onClick={turnOff}>Off</button>
             </div>
         </div>
     );

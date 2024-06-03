@@ -13,7 +13,6 @@ const ActionHistory = () => {
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    // { field: "registrarId", headerName: "Registrar ID" },
     {
       field: "device",
       headerName: "Device",
@@ -30,11 +29,12 @@ const ActionHistory = () => {
     {
       field: "createdDate",
       headerName: "Time",
-      type: "date",
+      type: "datetime",
       flex: 1,
     },
   ];
   const [data, setData] = useState([]);
+  const [pageSize, setPageSize] = useState(7);
 
   useEffect(() => {
     getData();
@@ -86,6 +86,10 @@ const ActionHistory = () => {
         <DataGrid
           rows={data}
           columns={columns}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[7, 20, 50]}
+          pagination
           components={{ Toolbar: GridToolbar }}
         />
       </Box>

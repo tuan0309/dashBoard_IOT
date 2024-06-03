@@ -32,6 +32,11 @@ const DataSensor = () => {
       headerName: "Light",
       flex: 1,
     },
+    // {
+    //   field: "wind",
+    //   headerName: "Wind",
+    //   flex: 1,
+    // },
     {
       field: "createdDate",
       headerName: "Ngày tạo",
@@ -39,6 +44,7 @@ const DataSensor = () => {
     },
   ];
   const [data, setData] = useState([]);
+  const [pageSize, setPageSize] = useState(7);
 
   useEffect(() => {
     getDataSensor();
@@ -90,6 +96,10 @@ const DataSensor = () => {
         <DataGrid
           rows={data}
           columns={columns}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[7, 20, 50]}
+          pagination
           components={{ Toolbar: GridToolbar }}
         />
       </Box>

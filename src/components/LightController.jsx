@@ -7,12 +7,12 @@ function Light() {
 
   const turnOn = () => {
     setIsOn(true);
-    toggleLed("onBoth");
+    toggleLed("on1");
   };
 
   const turnOff = () => {
     setIsOn(false);
-    toggleLed("offBoth");
+    toggleLed("off1");
   };
 
   const toggleLed = async (action) => {
